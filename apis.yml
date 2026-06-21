@@ -1,0 +1,151 @@
+aid: pinpoint
+url: https://raw.githubusercontent.com/api-evangelist/pinpoint/refs/heads/main/apis.yml
+name: Pinpoint
+kind: company
+description: Pinpoint is an applicant tracking system (ATS) and recruitment platform
+  for in-house talent teams. Its REST API follows the JSON:API specification and is
+  served per-tenant at https://{subdomain}.pinpointhq.com/api/v1, exposing jobs,
+  applications, candidates, comments, files, and webhooks for building recruitment
+  integrations. Not to be confused with AWS Pinpoint (customer engagement) or
+  Pinpoint (signal/data intelligence).
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- ATS
+- Recruitment
+- Hiring
+- HR Tech
+- JSON:API
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: pinpoint:jobs
+  name: Pinpoint Jobs API
+  tags:
+  - Jobs
+  - Requisitions
+  - Recruitment
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/reference/get-jobs
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+  - url: https://developers.pinpointhq.com/reference/get-jobs
+    type: APIReference
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: List, fetch, create, update, and destroy job postings (requisitions),
+    with JSON:API filtering by status, department, location, and division, plus
+    pagination, sorting, and related includes for departments, locations, stages,
+    and applications.
+- aid: pinpoint:applications
+  name: Pinpoint Applications API
+  tags:
+  - Applications
+  - Pipeline
+  - Stages
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/reference/get-applications
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+  - url: https://developers.pinpointhq.com/reference/get-applications
+    type: APIReference
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: Manage candidate applications as they move through a job's hiring
+    workflow - list, fetch, create, update, and destroy applications, with includes
+    for jobs, candidates, stages, and offers via JSON:API relationships.
+- aid: pinpoint:applicants
+  name: Pinpoint Applicants API
+  tags:
+  - Applicants
+  - Candidates
+  - Talent Pool
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/reference/get-candidates
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+  - url: https://developers.pinpointhq.com/reference/get-candidates
+    type: APIReference
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: Read and update candidate (applicant) records - name, contact details,
+    LinkedIn profile, and custom attributes - and access uploaded documents through
+    the candidates resource using JSON:API extra_fields for attachments.
+- aid: pinpoint:job-stages
+  name: Pinpoint Job Stages API
+  tags:
+  - Job Stages
+  - Hiring Workflow
+  - Pipeline
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/docs/introduction
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: Read the hiring workflow stages a job exposes and reference them when
+    moving applications through the pipeline, accessed as JSON:API related resources
+    of jobs and applications.
+- aid: pinpoint:comments-files
+  name: Pinpoint Comments and Files API
+  tags:
+  - Comments
+  - Files
+  - Attachments
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/reference/get-comments
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+  - url: https://developers.pinpointhq.com/reference/get-comments
+    type: APIReference
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: List, fetch, and create comments on applications, and upload or read
+    files and documents - submitted as base64 payloads on create and read back as
+    attachments via JSON:API extra_fields.
+- aid: pinpoint:webhooks
+  name: Pinpoint Webhooks
+  tags:
+  - Webhooks
+  - Events
+  - HMAC
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.pinpointhq.com/docs/webhooks-overview
+  baseURL: https://{subdomain}.pinpointhq.com/api/v1
+  properties:
+  - url: https://developers.pinpointhq.com/docs/webhooks-overview
+    type: Documentation
+  - url: https://developers.pinpointhq.com/docs/verifying-webhooks
+    type: Documentation
+  - url: openapi/pinpoint-openapi.yml
+    type: OpenAPI
+  description: Subscribe to account events - new application, application moved,
+    applicant hired, job created/updated/deleted, offer accepted, interview
+    scheduled, and more - delivered as JSON payloads signed with a base64
+    PINPOINT-HMAC-SHA256 header and retried with exponential backoff.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/pinpoint-hq
+- type: Website
+  url: https://www.pinpointhq.com
+- type: Documentation
+  url: https://developers.pinpointhq.com/docs/introduction
+- type: Plans
+  url: plans/pinpoint-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/pinpoint-rate-limits.yml
+- type: FinOps
+  url: finops/pinpoint-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

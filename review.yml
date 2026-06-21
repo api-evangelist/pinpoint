@@ -1,0 +1,106 @@
+aid: pinpoint
+name: Pinpoint
+review:
+  question: Is this catalog entry for Pinpoint the recruitment/ATS API (pinpointhq.com), correctly disambiguated from AWS Pinpoint and other "Pinpoint" products?
+  answer: true
+  date: '2026-06-21'
+  reviewer: API Evangelist
+disambiguation:
+  thisProvider:
+    name: Pinpoint
+    vendor: Pinpoint (pinpointhq.com)
+    website: https://www.pinpointhq.com
+    developerPortal: https://developers.pinpointhq.com/docs/introduction
+    category: Applicant Tracking System (ATS) / Recruitment platform
+    apiStyle: REST following the JSON:API specification
+    baseURL: https://{subdomain}.pinpointhq.com/api/v1
+    auth: X-API-KEY request header (HTTP 401 when missing/invalid)
+    mediaType: application/vnd.api+json
+  notToBeConfusedWith:
+  - name: AWS Pinpoint (Amazon Pinpoint)
+    vendor: Amazon Web Services
+    website: https://aws.amazon.com/pinpoint/
+    category: Customer engagement / multichannel marketing messaging (email, SMS, push, voice)
+    distinction: >-
+      A completely different product and company. AWS Pinpoint is an AWS
+      messaging/engagement service with AWS SigV4 authentication and
+      pinpoint.{region}.amazonaws.com endpoints. It has no relation to the
+      pinpointhq.com recruitment ATS modeled here.
+  - name: Pinpoint (signal / data intelligence)
+    vendor: Other "Pinpoint" branded products
+    category: Signal, location, or data intelligence tooling
+    distinction: >-
+      Various unrelated products use the "Pinpoint" name in signal/data,
+      geolocation, and analytics contexts. This entry is strictly the
+      pinpointhq.com recruitment ATS.
+findings:
+  summary: |
+    This entry models the Pinpoint (pinpointhq.com) recruitment ATS public
+    REST API. The API adheres to the JSON:API specification, is served on a
+    per-tenant subdomain at https://{subdomain}.pinpointhq.com/api/v1, and
+    authenticates with an X-API-KEY header generated in Settings >
+    API & Webhooks. Documented resources include jobs, applications,
+    candidates (applicants), comments, files/documents (base64 upload and
+    attachments read via JSON:API extra_fields), and additional recruitment
+    resources (custom fields, departments, divisions, locations, interviews,
+    requisitions, users). Webhooks deliver event payloads signed with a
+    base64 PINPOINT-HMAC-SHA256 header and retry up to 10 times over 24 hours.
+    Pricing is sales-led and quote-based, so plans, rate-limits, and finops
+    artifacts are marked reconciled false.
+  endpointsConfirmed:
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/jobs
+    - POST   https://{subdomain}.pinpointhq.com/api/v1/jobs
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/jobs/{id}
+    - PATCH  https://{subdomain}.pinpointhq.com/api/v1/jobs/{id}
+    - DELETE https://{subdomain}.pinpointhq.com/api/v1/jobs/{id}
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/applications
+    - POST   https://{subdomain}.pinpointhq.com/api/v1/applications
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/applications/{id}
+    - PATCH  https://{subdomain}.pinpointhq.com/api/v1/applications/{id}
+    - DELETE https://{subdomain}.pinpointhq.com/api/v1/applications/{id}
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/candidates
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/candidates/{id}
+    - PATCH  https://{subdomain}.pinpointhq.com/api/v1/candidates/{id}
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/comments
+    - POST   https://{subdomain}.pinpointhq.com/api/v1/comments
+    - GET    https://{subdomain}.pinpointhq.com/api/v1/comments/{id}
+  webhookEvents:
+    - New application
+    - Application moved / stage changed
+    - Applicant hired
+    - Job created / updated / deleted
+    - Offer accepted
+    - Interview scheduled
+    - Background check completed
+    - Requisition approved / created
+    - Onboarding completed / stage completed / workflow completed
+    - User created on company
+    - Talent Pipeline candidate created
+sources:
+  - url: https://developers.pinpointhq.com/docs/introduction
+    type: Documentation
+    note: Confirms REST + JSON:API, base URL https://{subdomain}.pinpointhq.com/api/v1.
+  - url: https://developers.pinpointhq.com/docs/authentication
+    type: Documentation
+    note: Confirms X-API-KEY header auth and 401 on failure.
+  - url: https://developers.pinpointhq.com/docs/jsonapi-quick-reference
+    type: Documentation
+    note: JSON:API data/type/id/attributes/relationships, include and extra_fields params.
+  - url: https://developers.pinpointhq.com/reference/get-jobs
+    type: APIReference
+    note: Jobs list endpoint with filter/page/sort/include parameters.
+  - url: https://developers.pinpointhq.com/reference/get-applications
+    type: APIReference
+    note: Applications list/create endpoints.
+  - url: https://developers.pinpointhq.com/reference/get-comments
+    type: APIReference
+    note: Comments list/fetch/create endpoints.
+  - url: https://developers.pinpointhq.com/docs/webhooks-overview
+    type: Documentation
+    note: 16 webhook event types; HTTP 2XX, 5s timeout, up to 10 retries over 24h.
+  - url: https://developers.pinpointhq.com/docs/verifying-webhooks
+    type: Documentation
+    note: base64 PINPOINT-HMAC-SHA256 signature verification.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

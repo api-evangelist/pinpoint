@@ -1,0 +1,58 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Pinpoint
+providerId: pinpoint
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- ATS
+- Recruitment
+- Hiring
+- HR Tech
+- JSON:API
+- Plans
+description: >-
+  Pinpoint is sold as a subscription applicant tracking system with sales-led,
+  quote-based pricing. There is no published self-service per-call API price
+  list; pricing is scoped to the recruitment platform subscription and varies
+  by company size, modules (ATS, Onboarding), and contract terms. API access is
+  enabled from account settings for subscribing customers rather than billed as
+  a metered API product. Specific figures are not published and are not
+  reconciled in this artifact.
+notes: >-
+  Pricing is not publicly listed; prospects must contact Pinpoint sales for a
+  quote. Verify current packaging and any API entitlements with the provider on
+  reconciliation.
+sources:
+- https://www.pinpointhq.com/pricing/
+- https://www.pinpointhq.com
+- https://developers.pinpointhq.com/docs/introduction
+plans:
+- id: pinpoint-platform
+  name: Pinpoint Platform Subscription
+  type: subscription
+  description: >-
+    Subscription to the Pinpoint ATS / recruitment platform. Pricing is
+    sales-led and quote-based; API access is included for subscribing customers
+    and enabled via Settings > API & Webhooks.
+  entries:
+  - label: Platform Subscription
+    name: platform_subscription
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Applicant Tracking System (ATS)
+  - name: REST API (JSON:API)
+  - name: Webhooks
+  - name: Onboarding (add-on)
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

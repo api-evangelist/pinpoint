@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "Pinpoint API",
+    "description": "REST API (JSON:API) for the Pinpoint applicant tracking system (ATS). Served per tenant at https://{subdomain}.pinpointhq.com/api/v1. Authenticate with an X-API-KEY header. Not to be confused with AWS Pinpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "X-API-KEY" },
+      { "key": "value", "value": "{{apiKey}}" },
+      { "key": "in", "value": "header" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://{{subdomain}}.pinpointhq.com/api/v1" },
+    { "key": "subdomain", "value": "acme" },
+    { "key": "apiKey", "value": "" },
+    { "key": "id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "List jobs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+          }
+        },
+        {
+          "name": "Create job",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"jobs\",\n    \"attributes\": {\n      \"title\": \"\",\n      \"status\": \"open\"\n    }\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+          }
+        },
+        {
+          "name": "Fetch job",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/jobs/{{id}}", "host": ["{{baseUrl}}"], "path": ["jobs", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Update job",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"jobs\",\n    \"id\": \"{{id}}\",\n    \"attributes\": {}\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/jobs/{{id}}", "host": ["{{baseUrl}}"], "path": ["jobs", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Destroy job",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/jobs/{{id}}", "host": ["{{baseUrl}}"], "path": ["jobs", "{{id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "List applications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/applications", "host": ["{{baseUrl}}"], "path": ["applications"] }
+          }
+        },
+        {
+          "name": "Create application",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"applications\",\n    \"attributes\": {\n      \"first_name\": \"\",\n      \"last_name\": \"\",\n      \"email\": \"\"\n    }\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/applications", "host": ["{{baseUrl}}"], "path": ["applications"] }
+          }
+        },
+        {
+          "name": "Fetch application",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/applications/{{id}}", "host": ["{{baseUrl}}"], "path": ["applications", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Update application",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"applications\",\n    \"id\": \"{{id}}\",\n    \"attributes\": {}\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/applications/{{id}}", "host": ["{{baseUrl}}"], "path": ["applications", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Destroy application",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/applications/{{id}}", "host": ["{{baseUrl}}"], "path": ["applications", "{{id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Applicants",
+      "item": [
+        {
+          "name": "List candidates",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/candidates", "host": ["{{baseUrl}}"], "path": ["candidates"] }
+          }
+        },
+        {
+          "name": "Fetch candidate",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/candidates/{{id}}?extra_fields[candidates]=attachments", "host": ["{{baseUrl}}"], "path": ["candidates", "{{id}}"], "query": [{ "key": "extra_fields[candidates]", "value": "attachments" }] }
+          }
+        },
+        {
+          "name": "Update candidate",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"candidates\",\n    \"id\": \"{{id}}\",\n    \"attributes\": {\n      \"documents_base64\": []\n    }\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/candidates/{{id}}", "host": ["{{baseUrl}}"], "path": ["candidates", "{{id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments and Files",
+      "item": [
+        {
+          "name": "List comments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/comments", "host": ["{{baseUrl}}"], "path": ["comments"] }
+          }
+        },
+        {
+          "name": "Create comment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/vnd.api+json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"data\": {\n    \"type\": \"comments\",\n    \"attributes\": {\n      \"body\": \"\"\n    }\n  }\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/comments", "host": ["{{baseUrl}}"], "path": ["comments"] }
+          }
+        },
+        {
+          "name": "Fetch comment",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/vnd.api+json" }],
+            "url": { "raw": "{{baseUrl}}/comments/{{id}}", "host": ["{{baseUrl}}"], "path": ["comments", "{{id}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

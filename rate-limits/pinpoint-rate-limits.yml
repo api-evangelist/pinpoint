@@ -1,0 +1,61 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Pinpoint
+providerId: pinpoint
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- ATS
+- Recruitment
+- Hiring
+- HR Tech
+- JSON:API
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The Pinpoint API is served per tenant over HTTPS and returns standard HTTP
+  status codes. Specific published request-per-minute or per-day rate limit
+  values are not documented in the public developer portal; list endpoints are
+  bounded by JSON:API pagination (page[size] 0-1000, default 100) which acts as
+  a practical per-request ceiling. Webhook delivery is retried up to 10 times
+  over 24 hours with exponential backoff and jitter, with a five-second
+  per-attempt timeout. Specific throttling thresholds are not reconciled in this
+  artifact.
+notes: >-
+  No explicit numeric API rate limits are published. Confirm any per-account
+  throttling, burst, and quota behavior with Pinpoint support on reconciliation.
+sources:
+- https://developers.pinpointhq.com/docs/introduction
+- https://developers.pinpointhq.com/docs/jsonapi-quick-reference
+- https://developers.pinpointhq.com/docs/webhooks-overview
+responseCodes:
+  throttled: 429
+limits:
+- name: Page Size
+  scope: request
+  metric: records
+  limit: 1000
+  notes: JSON:API page[size] accepts 0-1000 and defaults to 100; bounds records per request.
+- name: Request Rate
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: No published per-minute or per-day API request limit; confirm with support.
+- name: Webhook Delivery Retries
+  scope: webhook
+  metric: attempts
+  limit: 10
+  notes: Up to 10 retries over 24 hours with exponential backoff and jitter; 5-second timeout per attempt.
+policies:
+- name: Pagination Bound
+  description: List endpoints are paginated via page[number] and page[size] (max 1000).
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+- name: Webhook Retry
+  description: Failed webhook deliveries retry with exponential backoff and jitter; endpoints disable after exhausting retries.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

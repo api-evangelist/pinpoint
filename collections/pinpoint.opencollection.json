@@ -1,0 +1,249 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pinpoint API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{apiKey}}",
+      "in": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/jobs"
+          },
+          "docs": "Returns a paginated list of jobs (requisitions). Supports filter, page, sort, and include parameters."
+        },
+        {
+          "info": {
+            "name": "Create job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/jobs",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"jobs\",\"attributes\":{\"title\":\"\",\"status\":\"open\"}}}"
+            }
+          },
+          "docs": "Create a job."
+        },
+        {
+          "info": {
+            "name": "Fetch job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/jobs/{{id}}"
+          },
+          "docs": "Fetch a single job by id."
+        },
+        {
+          "info": {
+            "name": "Update job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/jobs/{{id}}",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"jobs\",\"id\":\"{{id}}\",\"attributes\":{}}}"
+            }
+          },
+          "docs": "Update a job."
+        },
+        {
+          "info": {
+            "name": "Destroy job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/jobs/{{id}}"
+          },
+          "docs": "Delete a job."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Applications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List applications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/applications"
+          },
+          "docs": "List applications. Supports filter, page, sort, and include."
+        },
+        {
+          "info": {
+            "name": "Create application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/applications",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"applications\",\"attributes\":{\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\"}}}"
+            }
+          },
+          "docs": "Create an application, optionally with a base64 CV/document and custom attributes."
+        },
+        {
+          "info": {
+            "name": "Fetch application",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/applications/{{id}}"
+          },
+          "docs": "Fetch a single application. Use include and extra_fields for offers and attachments."
+        },
+        {
+          "info": {
+            "name": "Update application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/applications/{{id}}",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"applications\",\"id\":\"{{id}}\",\"attributes\":{}}}"
+            }
+          },
+          "docs": "Update an application (e.g. move it through stages)."
+        },
+        {
+          "info": {
+            "name": "Destroy application",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/applications/{{id}}"
+          },
+          "docs": "Delete an application."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Applicants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List candidates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/candidates"
+          },
+          "docs": "List candidates (applicants)."
+        },
+        {
+          "info": {
+            "name": "Fetch candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/candidates/{{id}}"
+          },
+          "docs": "Fetch a candidate. Use extra_fields[candidates]=attachments to read documents."
+        },
+        {
+          "info": {
+            "name": "Update candidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/candidates/{{id}}",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"candidates\",\"id\":\"{{id}}\",\"attributes\":{\"documents_base64\":[]}}}"
+            }
+          },
+          "docs": "Update a candidate, including uploading documents via documents_base64."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Comments and Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/comments"
+          },
+          "docs": "List comments, optionally filtered by application."
+        },
+        {
+          "info": {
+            "name": "Create comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/comments",
+            "body": {
+              "type": "json",
+              "data": "{\"data\":{\"type\":\"comments\",\"attributes\":{\"body\":\"\"}}}"
+            }
+          },
+          "docs": "Create a comment on an application."
+        },
+        {
+          "info": {
+            "name": "Fetch comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{{subdomain}}.pinpointhq.com/api/v1/comments/{{id}}"
+          },
+          "docs": "Fetch a single comment."
+        }
+      ]
+    }
+  ]
+}
