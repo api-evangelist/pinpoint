@@ -134,6 +134,8 @@ apis:
     scheduled, and more - delivered as JSON payloads signed with a base64
     PINPOINT-HMAC-SHA256 header and retried with exponential backoff.
 common:
+- type: AgenticAccess
+  url: agentic-access/pinpoint-agentic-access.yml
 - type: DomainSecurity
   url: security/pinpoint-domain-security.yml
 - type: Authentication
