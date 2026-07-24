@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  title: Pinpoint Applicants API
+  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform. The API adheres to the JSON:API specification and is served on a per-tenant basis. All requests must be made over HTTPS to https://{subdomain}.pinpointhq.com/api/v1, where {subdomain} matches the subdomain used to log in to Pinpoint. Authentication uses an X-API-KEY header generated from Settings > API & Webhooks. Requests and responses use the application/vnd.api+json media type. Not to be confused with AWS Pinpoint (customer engagement messaging) or Pinpoint (signal / data intelligence).
+  termsOfService: https://www.pinpointhq.com/legal/
+  contact:
+    name: Pinpoint Support
+    url: https://developers.pinpointhq.com/docs/introduction
+  version: '1.0'
+servers:
+- url: https://{subdomain}.pinpointhq.com/api/v1
+  description: Per-tenant Pinpoint API base URL.
+  variables:
+    subdomain:
+      default: acme
+      description: The subdomain used to log in to your Pinpoint account.
+security:
+- ApiKeyAuth: []
+tags:
+- name: Applicants
+  description: Candidate (applicant) records.
+paths:
+  /candidates:
+    get:
+      operationId: listCandidates
+      tags:
+      - Applicants
+      summary: List candidates (applicants)
+      parameters:
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/Sort'
+      - $ref: '#/components/parameters/Include'
+      responses:
+        '200':
+          description: A list of candidates.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CandidateCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /candidates/{id}:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      operationId: getCandidate
+      tags:
+      - Applicants
+      summary: Fetch candidate (applicant)
+      description: Fetch a candidate. Uploaded documents can be read through the attachments relationship using the extra_fields parameter.
+      parameters:
+      - $ref: '#/components/parameters/Include'
+      - name: extra_fields[candidates]
+        in: query
+        description: Request expensive fields such as attachments.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The requested candidate.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CandidateSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateCandidate
+      tags:
+      - Applicants
+      summary: Update candidate (applicant)
+      description: Update a candidate, including uploading documents via a documents_base64 array attribute.
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CandidateSingleWrite'
+      responses:
+        '200':
+          description: The updated candidate.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CandidateSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+components:
+  schemas:
+    CandidateSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: candidates
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/CandidateAttributes'
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    CandidateSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Candidate'
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    CandidateCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidate'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CandidateAttributes:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        linkedin_url:
+          type: string
+        documents_base64:
+          type: array
+          description: Base64-encoded documents to upload on update.
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Candidate:
+      type: object
+      properties:
+        type:
+          type: string
+          example: candidates
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CandidateAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key generated in Settings > API & Webhooks > API Keys. Sent with every request as the X-API-KEY header. Missing or invalid keys return HTTP 401.

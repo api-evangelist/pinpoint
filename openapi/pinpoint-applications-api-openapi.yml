@@ -1,0 +1,288 @@
+openapi: 3.0.1
+info:
+  title: Pinpoint Applicants Applications API
+  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform. The API adheres to the JSON:API specification and is served on a per-tenant basis. All requests must be made over HTTPS to https://{subdomain}.pinpointhq.com/api/v1, where {subdomain} matches the subdomain used to log in to Pinpoint. Authentication uses an X-API-KEY header generated from Settings > API & Webhooks. Requests and responses use the application/vnd.api+json media type. Not to be confused with AWS Pinpoint (customer engagement messaging) or Pinpoint (signal / data intelligence).
+  termsOfService: https://www.pinpointhq.com/legal/
+  contact:
+    name: Pinpoint Support
+    url: https://developers.pinpointhq.com/docs/introduction
+  version: '1.0'
+servers:
+- url: https://{subdomain}.pinpointhq.com/api/v1
+  description: Per-tenant Pinpoint API base URL.
+  variables:
+    subdomain:
+      default: acme
+      description: The subdomain used to log in to your Pinpoint account.
+security:
+- ApiKeyAuth: []
+tags:
+- name: Applications
+  description: Candidate applications moving through hiring workflows.
+paths:
+  /applications:
+    get:
+      operationId: listApplications
+      tags:
+      - Applications
+      summary: List applications
+      parameters:
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/Sort'
+      - $ref: '#/components/parameters/Include'
+      - name: filter[job_id]
+        in: query
+        schema:
+          type: integer
+      - name: filter[stage_id]
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of applications.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ApplicationCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createApplication
+      tags:
+      - Applications
+      summary: Create application
+      description: Creates an application for a job. Supports candidate name, email, phone, address, LinkedIn URL, a CV/document upload as a base64 payload, and custom attributes.
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/ApplicationSingleWrite'
+      responses:
+        '201':
+          description: The created application.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ApplicationSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /applications/{id}:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      operationId: getApplication
+      tags:
+      - Applications
+      summary: Fetch application
+      description: Fetch a single application. Related offers, candidates, jobs, and stages can be requested with the include parameter, and computationally expensive fields such as attachments via extra_fields.
+      parameters:
+      - $ref: '#/components/parameters/Include'
+      - name: extra_fields[offers]
+        in: query
+        description: Request expensive fields such as attachments on included offers.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The requested application.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ApplicationSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateApplication
+      tags:
+      - Applications
+      summary: Update application
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/ApplicationSingleWrite'
+      responses:
+        '200':
+          description: The updated application.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ApplicationSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: destroyApplication
+      tags:
+      - Applications
+      summary: Destroy application
+      responses:
+        '204':
+          description: The application was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ApplicationSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: applications
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/ApplicationAttributes'
+            relationships:
+              type: object
+              additionalProperties: true
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    ApplicationSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Application'
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    ApplicationCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Application:
+      type: object
+      properties:
+        type:
+          type: string
+          example: applications
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApplicationAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    ApplicationAttributes:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        linkedin_url:
+          type: string
+        cv_base64:
+          type: string
+          description: Base64-encoded CV/document supplied on create.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key generated in Settings > API & Webhooks > API Keys. Sent with every request as the X-API-KEY header. Missing or invalid keys return HTTP 401.

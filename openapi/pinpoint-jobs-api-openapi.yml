@@ -1,0 +1,301 @@
+openapi: 3.0.1
+info:
+  title: Pinpoint Applicants Jobs API
+  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform. The API adheres to the JSON:API specification and is served on a per-tenant basis. All requests must be made over HTTPS to https://{subdomain}.pinpointhq.com/api/v1, where {subdomain} matches the subdomain used to log in to Pinpoint. Authentication uses an X-API-KEY header generated from Settings > API & Webhooks. Requests and responses use the application/vnd.api+json media type. Not to be confused with AWS Pinpoint (customer engagement messaging) or Pinpoint (signal / data intelligence).
+  termsOfService: https://www.pinpointhq.com/legal/
+  contact:
+    name: Pinpoint Support
+    url: https://developers.pinpointhq.com/docs/introduction
+  version: '1.0'
+servers:
+- url: https://{subdomain}.pinpointhq.com/api/v1
+  description: Per-tenant Pinpoint API base URL.
+  variables:
+    subdomain:
+      default: acme
+      description: The subdomain used to log in to your Pinpoint account.
+security:
+- ApiKeyAuth: []
+tags:
+- name: Jobs
+  description: Job postings and requisitions.
+paths:
+  /jobs:
+    get:
+      operationId: listJobs
+      tags:
+      - Jobs
+      summary: List jobs
+      description: Returns a paginated list of jobs (requisitions).
+      parameters:
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/Sort'
+      - $ref: '#/components/parameters/Include'
+      - name: filter[status]
+        in: query
+        description: Filter by job status (e.g. open, closed, archived, draft).
+        schema:
+          type: string
+      - name: filter[department_id]
+        in: query
+        schema:
+          type: integer
+      - name: filter[location_id]
+        in: query
+        schema:
+          type: integer
+      - name: filter[division_id]
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of jobs.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/JobCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createJob
+      tags:
+      - Jobs
+      summary: Create job
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/JobSingleWrite'
+      responses:
+        '201':
+          description: The created job.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/JobSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /jobs/{id}:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      operationId: getJob
+      tags:
+      - Jobs
+      summary: Fetch job
+      parameters:
+      - $ref: '#/components/parameters/Include'
+      responses:
+        '200':
+          description: The requested job.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/JobSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateJob
+      tags:
+      - Jobs
+      summary: Update job
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/JobSingleWrite'
+      responses:
+        '200':
+          description: The updated job.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/JobSingle'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: destroyJob
+      tags:
+      - Jobs
+      summary: Destroy job
+      responses:
+        '204':
+          description: The job was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    JobCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    JobSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: jobs
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/JobAttributes'
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    JobSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Job'
+    Job:
+      type: object
+      properties:
+        type:
+          type: string
+          example: jobs
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/JobAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    JobAttributes:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          description: e.g. open, closed, archived, draft.
+        employment_type:
+          type: string
+        workplace_type:
+          type: string
+          description: onsite, hybrid, or remote.
+        compensation_minimum:
+          type: number
+        compensation_maximum:
+          type: number
+        compensation_currency:
+          type: string
+        visibility:
+          type: string
+        opened_at:
+          type: string
+          format: date-time
+        deadline_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API key generated in Settings > API & Webhooks > API Keys. Sent with every request as the X-API-KEY header. Missing or invalid keys return HTTP 401.
