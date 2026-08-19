@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pinpoint Applicants Applications API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Applications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List applications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/applications",
+            "params": [
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The page of results to return. Defaults to 1."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (0-1000). Defaults to 100."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              },
+              {
+                "name": "filter[job_id]",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter[stage_id]",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List applications"
+        },
+        {
+          "info": {
+            "name": "Create application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/applications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an application for a job. Supports candidate name, email, phone, address, LinkedIn URL, a CV/document upload as a base64 payload, and custom attributes."
+        },
+        {
+          "info": {
+            "name": "Fetch application",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              },
+              {
+                "name": "extra_fields[offers]",
+                "value": "",
+                "type": "query",
+                "description": "Request expensive fields such as attachments on included offers."
+              }
+            ]
+          },
+          "docs": "Fetch a single application. Related offers, candidates, jobs, and stages can be requested with the include parameter, and computationally expensive fields such as attachments via extra_fields."
+        },
+        {
+          "info": {
+            "name": "Update application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update application"
+        },
+        {
+          "info": {
+            "name": "Destroy application",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              }
+            ]
+          },
+          "docs": "Destroy application"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

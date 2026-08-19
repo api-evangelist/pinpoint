@@ -1,0 +1,166 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pinpoint Applicants Jobs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/jobs",
+            "params": [
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The page of results to return. Defaults to 1."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (0-1000). Defaults to 100."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              },
+              {
+                "name": "filter[status]",
+                "value": "",
+                "type": "query",
+                "description": "Filter by job status (e.g. open, closed, archived, draft)."
+              },
+              {
+                "name": "filter[department_id]",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter[location_id]",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter[division_id]",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of jobs (requisitions)."
+        },
+        {
+          "info": {
+            "name": "Create job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/jobs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create job"
+        },
+        {
+          "info": {
+            "name": "Fetch job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              }
+            ]
+          },
+          "docs": "Fetch job"
+        },
+        {
+          "info": {
+            "name": "Update job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update job"
+        },
+        {
+          "info": {
+            "name": "Destroy job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              }
+            ]
+          },
+          "docs": "Destroy job"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

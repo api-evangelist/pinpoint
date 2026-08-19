@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pinpoint Applicants API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Applicants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List candidates (applicants)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/candidates",
+            "params": [
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The page of results to return. Defaults to 1."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (0-1000). Defaults to 100."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              }
+            ]
+          },
+          "docs": "List candidates (applicants)"
+        },
+        {
+          "info": {
+            "name": "Fetch candidate (applicant)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/candidates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes)."
+              },
+              {
+                "name": "extra_fields[candidates]",
+                "value": "",
+                "type": "query",
+                "description": "Request expensive fields such as attachments."
+              }
+            ]
+          },
+          "docs": "Fetch a candidate. Uploaded documents can be read through the attachments relationship using the extra_fields parameter."
+        },
+        {
+          "info": {
+            "name": "Update candidate (applicant)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{subdomain}.pinpointhq.com/api/v1/candidates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a candidate, including uploading documents via a documents_base64 array attribute."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
