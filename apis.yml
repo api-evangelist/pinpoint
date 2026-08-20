@@ -62,6 +62,8 @@ apis:
   humanURL: https://developers.pinpointhq.com/reference/get-jobs
   baseURL: https://{subdomain}.pinpointhq.com/api/v1
   tags:
+  - Application
+  tags_raw:
   - Applications
   properties:
   - type: OpenAPI
@@ -110,6 +112,8 @@ apis:
   humanURL: https://developers.pinpointhq.com/reference/get-jobs
   baseURL: https://{subdomain}.pinpointhq.com/api/v1
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
