@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Pinpoint Applicants Jobs API
-  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform. The API adheres to the JSON:API specification and is served on a per-tenant basis. All requests must be made over HTTPS to https://{subdomain}.pinpointhq.com/api/v1, where {subdomain} matches the subdomain used to log in to Pinpoint. Authentication uses an X-API-KEY header generated from Settings > API & Webhooks. Requests and responses use the application/vnd.api+json media type. Not to be confused with AWS Pinpoint (customer engagement messaging) or Pinpoint (signal / data intelligence).
+  title: Pinpoint Jobs API
+  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform.
   termsOfService: https://www.pinpointhq.com/legal/
   contact:
     name: Pinpoint Support
@@ -137,15 +137,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    JobCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Job'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     JobSingleWrite:
       type: object
       properties:
@@ -159,31 +150,34 @@ components:
               type: string
             attributes:
               $ref: '#/components/schemas/JobAttributes'
-    PaginationMeta:
+    Errors:
       type: object
       properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
-    JobSingle:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    JobCollection:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Job'
-    Job:
-      type: object
-      properties:
-        type:
-          type: string
-          example: jobs
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/JobAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     JobAttributes:
       type: object
       properties:
@@ -219,25 +213,31 @@ components:
         updated_at:
           type: string
           format: date-time
-    Errors:
+    Job:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-              title:
-                type: string
-              detail:
-                type: string
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
+        type:
+          type: string
+          example: jobs
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/JobAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    JobSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Job'
   parameters:
     PageNumber:
       name: page[number]
@@ -246,6 +246,12 @@ components:
       schema:
         type: integer
         default: 1
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
     Sort:
       name: sort
       in: query
@@ -259,12 +265,6 @@ components:
       description: The resource identifier.
       schema:
         type: string
-    Include:
-      name: include
-      in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
     PageSize:
       name: page[size]
       in: query
@@ -275,14 +275,14 @@ components:
         maximum: 1000
         default: 100
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/vnd.api+json:
           schema:

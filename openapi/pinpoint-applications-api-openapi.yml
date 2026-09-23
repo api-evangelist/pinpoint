@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Pinpoint Applicants Applications API
-  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform. The API adheres to the JSON:API specification and is served on a per-tenant basis. All requests must be made over HTTPS to https://{subdomain}.pinpointhq.com/api/v1, where {subdomain} matches the subdomain used to log in to Pinpoint. Authentication uses an X-API-KEY header generated from Settings > API & Webhooks. Requests and responses use the application/vnd.api+json media type. Not to be confused with AWS Pinpoint (customer engagement messaging) or Pinpoint (signal / data intelligence).
+  title: Pinpoint Applications API
+  description: REST API for the Pinpoint applicant tracking system (ATS) and recruitment platform.
   termsOfService: https://www.pinpointhq.com/legal/
   contact:
     name: Pinpoint Support
@@ -133,35 +133,61 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
   schemas:
-    ApplicationSingleWrite:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            type:
-              type: string
-              example: applications
-            id:
-              type: string
-            attributes:
-              $ref: '#/components/schemas/ApplicationAttributes'
-            relationships:
-              type: object
-              additionalProperties: true
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
     ApplicationSingle:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/Application'
+    Application:
+      type: object
+      properties:
+        type:
+          type: string
+          example: applications
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApplicationAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
     Errors:
       type: object
       properties:
@@ -190,19 +216,6 @@ components:
             $ref: '#/components/schemas/Application'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    Application:
-      type: object
-      properties:
-        type:
-          type: string
-          example: applications
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ApplicationAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
     ApplicationAttributes:
       type: object
       properties:
@@ -225,51 +238,38 @@ components:
         updated_at:
           type: string
           format: date-time
-  parameters:
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
-    Sort:
-      name: sort
-      in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
-      schema:
-        type: string
-    Include:
-      name: include
-      in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    PageSize:
-      name: page[size]
-      in: query
-      description: Number of results per page (0-1000). Defaults to 100.
-      schema:
-        type: integer
-        minimum: 0
-        maximum: 1000
-        default: 100
+    ApplicationSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: applications
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/ApplicationAttributes'
+            relationships:
+              type: object
+              additionalProperties: true
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/vnd.api+json:
           schema:
