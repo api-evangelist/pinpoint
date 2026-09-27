@@ -91,86 +91,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 components:
-  parameters:
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
-    Include:
-      name: include
-      in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    Sort:
-      name: sort
-      in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
-      schema:
-        type: string
-    PageSize:
-      name: page[size]
-      in: query
-      description: Number of results per page (0-1000). Defaults to 100.
-      schema:
-        type: integer
-        minimum: 0
-        maximum: 1000
-        default: 100
-  responses:
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-              title:
-                type: string
-              detail:
-                type: string
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
-    CandidateSingle:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Candidate'
     Candidate:
       type: object
       properties:
@@ -184,15 +105,6 @@ components:
         relationships:
           type: object
           additionalProperties: true
-    CandidateCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Candidate'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     CandidateSingleWrite:
       type: object
       properties:
@@ -206,6 +118,13 @@ components:
               type: string
             attributes:
               $ref: '#/components/schemas/CandidateAttributes'
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
     CandidateAttributes:
       type: object
       properties:
@@ -230,13 +149,94 @@ components:
         updated_at:
           type: string
           format: date-time
-    PaginationMeta:
+    Errors:
       type: object
       properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    CandidateCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidate'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CandidateSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Candidate'
+  parameters:
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+  responses:
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

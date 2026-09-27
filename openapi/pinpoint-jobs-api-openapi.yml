@@ -137,6 +137,31 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    JobSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Job'
+    Job:
+      type: object
+      properties:
+        type:
+          type: string
+          example: jobs
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/JobAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
     JobSingleWrite:
       type: object
       properties:
@@ -150,34 +175,6 @@ components:
               type: string
             attributes:
               $ref: '#/components/schemas/JobAttributes'
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-              title:
-                type: string
-              detail:
-                type: string
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
-    JobCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Job'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     JobAttributes:
       type: object
       properties:
@@ -213,56 +210,39 @@ components:
         updated_at:
           type: string
           format: date-time
-    Job:
+    Errors:
       type: object
       properties:
-        type:
-          type: string
-          example: jobs
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/JobAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
-    JobSingle:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    JobCollection:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Job'
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
   parameters:
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
     Include:
       name: include
       in: query
       description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    Sort:
-      name: sort
-      in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
       schema:
         type: string
     PageSize:
@@ -274,6 +254,26 @@ components:
         minimum: 0
         maximum: 1000
         default: 100
+    Sort:
+      name: sort
+      in: query
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      schema:
+        type: string
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
   responses:
     UnprocessableEntity:
       description: Validation failed for the submitted resource.

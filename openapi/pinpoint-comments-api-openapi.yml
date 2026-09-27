@@ -85,14 +85,83 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    CommentCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CommentSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Comment'
+    CommentAttributes:
+      type: object
+      properties:
+        body:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Comment:
+      type: object
+      properties:
+        type:
+          type: string
+          example: comments
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CommentAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              title:
+                type: string
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+    CommentSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: comments
+            attributes:
+              $ref: '#/components/schemas/CommentAttributes'
+            relationships:
+              type: object
+              additionalProperties: true
   parameters:
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
     Include:
       name: include
       in: query
@@ -108,6 +177,13 @@ components:
         minimum: 0
         maximum: 1000
         default: 100
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
     ResourceId:
       name: id
       in: path
@@ -134,82 +210,6 @@ components:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-  schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-              title:
-                type: string
-              detail:
-                type: string
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
-    CommentAttributes:
-      type: object
-      properties:
-        body:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-    CommentSingleWrite:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            type:
-              type: string
-              example: comments
-            attributes:
-              $ref: '#/components/schemas/CommentAttributes'
-            relationships:
-              type: object
-              additionalProperties: true
-    CommentSingle:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Comment'
-    Comment:
-      type: object
-      properties:
-        type:
-          type: string
-          example: comments
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CommentAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
-    CommentCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Comment'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
