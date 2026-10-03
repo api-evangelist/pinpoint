@@ -142,26 +142,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/Job'
-    Job:
-      type: object
-      properties:
-        type:
-          type: string
-          example: jobs
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/JobAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
     JobSingleWrite:
       type: object
       properties:
@@ -229,6 +209,19 @@ components:
                 properties:
                   pointer:
                     type: string
+    Job:
+      type: object
+      properties:
+        type:
+          type: string
+          example: jobs
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/JobAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
     JobCollection:
       type: object
       properties:
@@ -238,6 +231,32 @@ components:
             $ref: '#/components/schemas/Job'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+  responses:
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
   parameters:
     Include:
       name: include
@@ -245,6 +264,20 @@ components:
       description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
       schema:
         type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
     PageSize:
       name: page[size]
       in: query
@@ -260,39 +293,6 @@ components:
       description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
       schema:
         type: string
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
-      schema:
-        type: string
-  responses:
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
