@@ -85,56 +85,41 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    PageSize:
-      name: page[size]
-      in: query
-      description: Number of results per page (0-1000). Defaults to 100.
-      schema:
-        type: integer
-        minimum: 0
-        maximum: 1000
-        default: 100
-    Include:
-      name: include
-      in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
-      schema:
-        type: string
-    PageNumber:
-      name: page[number]
-      in: query
-      description: The page of results to return. Defaults to 1.
-      schema:
-        type: integer
-        default: 1
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
   schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
+    CommentAttributes:
+      type: object
+      properties:
+        body:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    CommentSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: comments
+            attributes:
+              $ref: '#/components/schemas/CommentAttributes'
+            relationships:
+              type: object
+              additionalProperties: true
+    CommentSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Comment'
     Errors:
       type: object
       properties:
@@ -163,40 +148,6 @@ components:
             $ref: '#/components/schemas/Comment'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
-    CommentSingleWrite:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            type:
-              type: string
-              example: comments
-            attributes:
-              $ref: '#/components/schemas/CommentAttributes'
-            relationships:
-              type: object
-              additionalProperties: true
-    CommentAttributes:
-      type: object
-      properties:
-        body:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-    CommentSingle:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Comment'
     Comment:
       type: object
       properties:
@@ -210,6 +161,55 @@ components:
         relationships:
           type: object
           additionalProperties: true
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: The page of results to return. Defaults to 1.
+      schema:
+        type: integer
+        default: 1
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of results per page (0-1000). Defaults to 100.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 1000
+        default: 100
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
