@@ -1,0 +1,43 @@
+slug: pinpoint
+provider: Pinpoint
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Applicants
+  spec_file: pinpoint-applicants-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.95
+  evidence: GET /candidates listCandidates List candidates (applicants) — 'REST API for the Pinpoint applicant
+    tracking system (ATS) and recruitment platform'
+  reason: Candidate/applicant records in an ATS directly realise Talent Acquisition Management.
+- tag: Applications
+  spec_file: pinpoint-applications-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.95
+  evidence: POST /applications createApplication Create application — ATS and recruitment platform
+  reason: Job applications lifecycle in an applicant tracking system is sourcing/recruiting, i.e. Talent
+    Acquisition Management.
+- tag: Jobs
+  spec_file: pinpoint-jobs-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.9
+  evidence: POST /jobs createJob Create job — 'REST API for the Pinpoint applicant tracking system (ATS)
+    and recruitment platform'
+  reason: Job requisitions/postings in an ATS are part of recruiting and hiring, under Talent Acquisition
+    Management (not background batch jobs).

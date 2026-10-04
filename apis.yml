@@ -152,6 +152,9 @@ apis:
   - type: Documentation
     url: https://developers.pinpointhq.com/docs/verifying-webhooks
 common:
+- type: CapabilityMap
+  url: capabilities/pinpoint-capability-edges.yml
+  name: Pinpoint Business Capability Map
 - type: AgenticAccess
   url: agentic-access/pinpoint-agentic-access.yml
 - type: DomainSecurity
