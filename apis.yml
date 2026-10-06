@@ -48,7 +48,7 @@ tags_raw:
 - HR Tech
 - JSON:API
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: pinpoint:pinpoint-applicants-api
@@ -152,6 +152,8 @@ apis:
   - type: Documentation
     url: https://developers.pinpointhq.com/docs/verifying-webhooks
 common:
+- url: https://www.pinpointhq.com/insights
+  type: Blog
 - type: CapabilityMap
   url: capabilities/pinpoint-capability-edges.yml
   name: Pinpoint Business Capability Map
