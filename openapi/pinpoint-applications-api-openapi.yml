@@ -134,19 +134,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Application:
-      type: object
-      properties:
-        type:
-          type: string
-          example: applications
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ApplicationAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
     ApplicationCollection:
       type: object
       properties:
@@ -185,11 +172,19 @@ components:
         updated_at:
           type: string
           format: date-time
-    ApplicationSingle:
+    Application:
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/Application'
+        type:
+          type: string
+          example: applications
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApplicationAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
     Errors:
       type: object
       properties:
@@ -225,30 +220,16 @@ components:
             relationships:
               type: object
               additionalProperties: true
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    UnprocessableEntity:
-      description: Validation failed for the submitted resource.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
+    ApplicationSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Application'
   parameters:
-    Sort:
-      name: sort
+    Include:
+      name: include
       in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
       schema:
         type: string
     PageNumber:
@@ -258,17 +239,10 @@ components:
       schema:
         type: integer
         default: 1
-    Include:
-      name: include
+    Sort:
+      name: sort
       in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
       schema:
         type: string
     PageSize:
@@ -280,6 +254,32 @@ components:
         minimum: 0
         maximum: 1000
         default: 100
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    UnprocessableEntity:
+      description: Validation failed for the submitted resource.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

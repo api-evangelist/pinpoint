@@ -144,46 +144,15 @@ components:
           type: integer
         page_count:
           type: integer
-    JobSingle:
+    JobCollection:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Job'
-    JobAttributes:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          description: e.g. open, closed, archived, draft.
-        employment_type:
-          type: string
-        workplace_type:
-          type: string
-          description: onsite, hybrid, or remote.
-        compensation_minimum:
-          type: number
-        compensation_maximum:
-          type: number
-        compensation_currency:
-          type: string
-        visibility:
-          type: string
-        opened_at:
-          type: string
-          format: date-time
-        deadline_at:
-          type: string
-          format: date-time
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     JobSingleWrite:
       type: object
       properties:
@@ -229,20 +198,51 @@ components:
                 properties:
                   pointer:
                     type: string
-    JobCollection:
+    JobSingle:
       type: object
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Job'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+          $ref: '#/components/schemas/Job'
+    JobAttributes:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          description: e.g. open, closed, archived, draft.
+        employment_type:
+          type: string
+        workplace_type:
+          type: string
+          description: onsite, hybrid, or remote.
+        compensation_minimum:
+          type: number
+        compensation_maximum:
+          type: number
+        compensation_currency:
+          type: string
+        visibility:
+          type: string
+        opened_at:
+          type: string
+          format: date-time
+        deadline_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
   parameters:
-    Sort:
-      name: sort
+    Include:
+      name: include
       in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
       schema:
         type: string
     PageNumber:
@@ -252,10 +252,10 @@ components:
       schema:
         type: integer
         default: 1
-    Include:
-      name: include
+    Sort:
+      name: sort
       in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
       schema:
         type: string
     ResourceId:
@@ -275,8 +275,8 @@ components:
         maximum: 1000
         default: 100
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing or invalid API key.
       content:
         application/vnd.api+json:
           schema:
@@ -287,8 +287,8 @@ components:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/vnd.api+json:
           schema:

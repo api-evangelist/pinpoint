@@ -92,26 +92,6 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
 components:
   schemas:
-    PaginationMeta:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
-    CandidateSingleWrite:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            type:
-              type: string
-              example: candidates
-            id:
-              type: string
-            attributes:
-              $ref: '#/components/schemas/CandidateAttributes'
     CandidateAttributes:
       type: object
       properties:
@@ -136,11 +116,13 @@ components:
         updated_at:
           type: string
           format: date-time
-    CandidateSingle:
+    PaginationMeta:
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/Candidate'
+        total_count:
+          type: integer
+        page_count:
+          type: integer
     Candidate:
       type: object
       properties:
@@ -154,6 +136,33 @@ components:
         relationships:
           type: object
           additionalProperties: true
+    CandidateSingle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Candidate'
+    CandidateSingleWrite:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              example: candidates
+            id:
+              type: string
+            attributes:
+              $ref: '#/components/schemas/CandidateAttributes'
+    CandidateCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidate'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     Errors:
       type: object
       properties:
@@ -173,20 +182,11 @@ components:
                 properties:
                   pointer:
                     type: string
-    CandidateCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Candidate'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
   parameters:
-    Sort:
-      name: sort
+    Include:
+      name: include
       in: query
-      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
       schema:
         type: string
     PageNumber:
@@ -196,17 +196,10 @@ components:
       schema:
         type: integer
         default: 1
-    Include:
-      name: include
+    Sort:
+      name: sort
       in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
+      description: Comma-separated sort fields (e.g. created_at, -updated_at). Prefix with a hyphen for descending order.
       schema:
         type: string
     PageSize:
@@ -218,9 +211,16 @@ components:
         minimum: 0
         maximum: 1000
         default: 100
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing or invalid API key.
       content:
         application/vnd.api+json:
           schema:
@@ -231,8 +231,8 @@ components:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/vnd.api+json:
           schema:

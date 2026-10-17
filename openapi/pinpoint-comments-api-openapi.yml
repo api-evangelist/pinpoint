@@ -86,13 +86,19 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    PaginationMeta:
+    Comment:
       type: object
       properties:
-        total_count:
-          type: integer
-        page_count:
-          type: integer
+        type:
+          type: string
+          example: comments
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CommentAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
     CommentAttributes:
       type: object
       properties:
@@ -101,6 +107,13 @@ components:
         created_at:
           type: string
           format: date-time
+    PaginationMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        page_count:
+          type: integer
     CommentSingleWrite:
       type: object
       properties:
@@ -115,6 +128,15 @@ components:
             relationships:
               type: object
               additionalProperties: true
+    CommentCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CommentSingle:
       type: object
       properties:
@@ -139,29 +161,13 @@ components:
                 properties:
                   pointer:
                     type: string
-    CommentCollection:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Comment'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    Comment:
-      type: object
-      properties:
-        type:
-          type: string
-          example: comments
-        id:
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CommentAttributes'
-        relationships:
-          type: object
-          additionalProperties: true
   parameters:
+    Include:
+      name: include
+      in: query
+      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
+      schema:
+        type: string
     PageNumber:
       name: page[number]
       in: query
@@ -169,19 +175,6 @@ components:
       schema:
         type: integer
         default: 1
-    Include:
-      name: include
-      in: query
-      description: Comma-separated list of relationship paths to side-load, with dot notation for nested relationships (JSON:API includes).
-      schema:
-        type: string
-    ResourceId:
-      name: id
-      in: path
-      required: true
-      description: The resource identifier.
-      schema:
-        type: string
     PageSize:
       name: page[size]
       in: query
@@ -191,9 +184,16 @@ components:
         minimum: 0
         maximum: 1000
         default: 100
+    ResourceId:
+      name: id
+      in: path
+      required: true
+      description: The resource identifier.
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing or invalid API key.
       content:
         application/vnd.api+json:
           schema:
@@ -204,8 +204,8 @@ components:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    Unauthorized:
-      description: Missing or invalid API key.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/vnd.api+json:
           schema:
