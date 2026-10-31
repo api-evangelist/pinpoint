@@ -1,4 +1,4 @@
-# Pinpoint (pinpoint)
+# Pinpoint
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,158 +66,121 @@
 
 Pinpoint is an applicant tracking system (ATS) and recruitment platform for in-house talent teams. Its REST API follows the JSON:API specification and is served per-tenant at https://{subdomain}.pinpointhq.com/api/v1, exposing jobs, applications, candidates, comments, files, and webhooks for building recruitment integrations. Not to be confused with AWS Pinpoint (customer engagement) or Pinpoint (signal/data intelligence).
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/pinpoint/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/pinpoint/refs/heads/main/apis.yml)
+**Areas:** Applicant Tracking · Recruiting · Hiring · Human Resources · JSON:API
 
-## Tags
+## Pinpoint on APIs.io
 
-- ATS
-- Recruitment
-- Hiring
-- HR Tech
-- JSON:API
+Everything profiled for Pinpoint is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/pinpoint/](https://apis.io/providers/pinpoint/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (4)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Pinpoint Applicants API](https://apis.io/apis/pinpoint/pinpoint-applicants-api/) — Candidate (applicant) records.
+- [Pinpoint Applications API](https://apis.io/apis/pinpoint/pinpoint-applications-api/) — Candidate applications moving through hiring workflows.
+- [Pinpoint Comments API](https://apis.io/apis/pinpoint/pinpoint-comments-api/) — Comments on applications.
+- [Pinpoint Jobs API](https://apis.io/apis/pinpoint/pinpoint-jobs-api/) — Job postings and requisitions.
 
-## APIs
+### Published properties
 
-### Pinpoint Jobs API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-List, fetch, create, update, and destroy job postings (requisitions), with JSON:API filtering by status, department, location, and division, plus pagination, sorting, and related includes for departments, locations, stages, and applications.
+#### Agentic access (1)
 
-- **Human URL:** [https://developers.pinpointhq.com/reference/get-jobs](https://developers.pinpointhq.com/reference/get-jobs)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Pinpoint Agentic Access](https://apis.io/agentic-access/pinpoint/pinpoint-agentic-access/)
 
-- Jobs
-- Requisitions
-- Recruitment
+#### Collections (5)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [API Reference](https://developers.pinpointhq.com/reference/get-jobs)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Pinpoint API](https://apis.io/collections/pinpoint/open-pinpoint/)
+- [Pinpoint Applicants API](https://apis.io/collections/pinpoint/open-pinpoint-applicants-api/)
+- [Pinpoint Applicants Applications API](https://apis.io/collections/pinpoint/open-pinpoint-applications-api/)
+- [Pinpoint Applicants Comments API](https://apis.io/collections/pinpoint/open-pinpoint-comments-api/)
+- [Pinpoint Applicants Jobs API](https://apis.io/collections/pinpoint/open-pinpoint-jobs-api/)
 
-### Pinpoint Applications API
+#### Security (2)
 
-Manage candidate applications as they move through a job's hiring workflow — list, fetch, create, update, and destroy applications, with includes for jobs, candidates, stages, and offers via JSON:API relationships.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://developers.pinpointhq.com/reference/get-applications](https://developers.pinpointhq.com/reference/get-applications)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
+- [Pinpoint Authentication](https://apis.io/security/pinpoint/pinpoint-authentication/)
+- [Pinpoint Domain Security](https://apis.io/security/pinpoint/pinpoint-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Applications
-- Pipeline
-- Stages
+Published plans, tiers and prices.
 
-#### Properties
+- [Pinpoint Plans Pricing](https://apis.io/plans/pinpoint/pinpoint-plans-pricing/)
 
-- [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [API Reference](https://developers.pinpointhq.com/reference/get-applications)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Pinpoint Applicants API
+Published request limits.
 
-Read and update candidate (applicant) records — name, contact details, LinkedIn profile, and custom attributes — and access uploaded documents through the candidates resource using JSON:API extra_fields for attachments.
+- [Pinpoint Rate Limits](https://apis.io/rate-limits/pinpoint/pinpoint-rate-limits/)
 
-- **Human URL:** [https://developers.pinpointhq.com/reference/get-candidates](https://developers.pinpointhq.com/reference/get-candidates)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Applicants
-- Candidates
-- Talent Pool
+- [Pinpoint Finops](https://apis.io/finops/pinpoint/pinpoint-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [API Reference](https://developers.pinpointhq.com/reference/get-candidates)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Pinpoint Job Stages API
-
-Read the hiring workflow stages a job exposes and reference them when moving applications through the pipeline, accessed as JSON:API related resources of jobs and applications.
-
-- **Human URL:** [https://developers.pinpointhq.com/docs/introduction](https://developers.pinpointhq.com/docs/introduction)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
-
-#### Tags
-
-- Job Stages
-- Hiring Workflow
-- Pipeline
-
-#### Properties
-
-- [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Pinpoint Comments and Files API
-
-List, fetch, and create comments on applications, and upload or read files and documents — submitted as base64 payloads on create and read back as attachments via JSON:API extra_fields.
-
-- **Human URL:** [https://developers.pinpointhq.com/reference/get-comments](https://developers.pinpointhq.com/reference/get-comments)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
-
-#### Tags
-
-- Comments
-- Files
-- Attachments
-
-#### Properties
-
-- [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [API Reference](https://developers.pinpointhq.com/reference/get-comments)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Pinpoint Webhooks
-
-Subscribe to account events — new application, application moved, applicant hired, job created/updated/deleted, offer accepted, interview scheduled, and more — delivered as JSON payloads signed with a base64 PINPOINT-HMAC-SHA256 header and retried with exponential backoff.
-
-- **Human URL:** [https://developers.pinpointhq.com/docs/webhooks-overview](https://developers.pinpointhq.com/docs/webhooks-overview)
-- **Base URL:** `https://{subdomain}.pinpointhq.com/api/v1`
-
-#### Tags
-
-- Webhooks
-- Events
-- HMAC
-
-#### Properties
-
-- [Documentation](https://developers.pinpointhq.com/docs/webhooks-overview)
-- [Documentation](https://developers.pinpointhq.com/docs/verifying-webhooks)
-- [OpenAPI](openapi/pinpoint-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/pinpoint.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/pinpoint.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/pinpoint-hq)
 - [Website](https://www.pinpointhq.com)
 - [Documentation](https://developers.pinpointhq.com/docs/introduction)
-- [Plans](plans/pinpoint-plans-pricing.yml)
-- [Rate Limits](rate-limits/pinpoint-rate-limits.yml)
-- [Fin Ops](finops/pinpoint-finops.yml)
+- [Blog](https://www.pinpointhq.com/insights)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 25.1** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 51.8 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 26.2 |
+| Access clarity | 5.3 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Employment & Payroll
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/pinpoint/](https://apis.io/providers/pinpoint/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Pinpoint: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/pinpoint/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
